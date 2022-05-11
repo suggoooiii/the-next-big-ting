@@ -1,13 +1,18 @@
-import React, {useCallback, useRef} from "react"
-import {AnimatePresence, View} from "moti"
-import {ScrollView} from "react-native-gesture-handler"
-import TaskItem from "./TaskItem"
-import {makeStyledComponent} from "../utils/styled"
+/* eslint-disable react/prop-types */
+import "react-native-reanimated";
+import {useCallback, useRef} from "react";
+import {AnimatePresence, View} from "moti";
+import {ScrollView} from "react-native-gesture-handler";
 
-const StyledView = makeStyledComponent(View)
-const StyledScrollView = makeStyledComponent(ScrollView)
+// my imports
+import TaskItem from "./TaskItem";
+import {makeStyledComponent} from "../../utils/makeStyledComponent";
 
-export const AnimatedTaskItem = props => {
+const StyledView = makeStyledComponent(View);
+const StyledScrollView = makeStyledComponent(ScrollView);
+
+// props from taskList
+export function AnimatedTaskItem(props) {
   const {
     simultaneousHandlers,
     data,
@@ -17,25 +22,32 @@ export const AnimatedTaskItem = props => {
     onFinishEditing,
     onPressLabel,
     onRemove,
-  } = props
+  } = props;
+  //
   const handleToggleCheckbox = useCallback(() => {
-    onToggleItem(data)
-  }, [data, onToggleItem])
+    onToggleItem(data);
+  }, [data, onToggleItem]);
+
+  // on change subject
   const handleChangeSubject = useCallback(
     subject => {
-      onChangeSubject(data, subject)
+      onChangeSubject(data, subject);
     },
-    [data, onChangeSubject],
-  )
+    [data, onChangeSubject]
+  );
+  //
   const handleFinishEditing = useCallback(() => {
-    onFinishEditing(data)
-  }, [data, onFinishEditing])
+    onFinishEditing(data);
+  }, [data, onFinishEditing]);
+  //
   const handlePressLabel = useCallback(() => {
-    onPressLabel(data)
-  }, [data, onPressLabel])
+    onPressLabel(data);
+  }, [data, onPressLabel]);
+  //
   const handleRemove = useCallback(() => {
-    onRemove(data)
-  }, [data, onRemove])
+    onRemove(data);
+  }, [data, onRemove]);
+
   return (
     <StyledView
       w="full"
@@ -67,9 +79,10 @@ export const AnimatedTaskItem = props => {
         onRemove={handleRemove}
       />
     </StyledView>
-  )
+  );
 }
 
+// props from mainscreen
 export default function TaskList(props) {
   const {
     data,
@@ -79,8 +92,11 @@ export default function TaskList(props) {
     onFinishEditing,
     onPressLabel,
     onRemoveItem,
-  } = props
-  const refScrollView = useRef(null)
+    // handleAlarmModal,
+  } = props;
+
+  // ref
+  const refScrollView = useRef(null);
 
   return (
     <StyledScrollView ref={refScrollView} w="full">
@@ -100,6 +116,5 @@ export default function TaskList(props) {
         ))}
       </AnimatePresence>
     </StyledScrollView>
-  )
+  );
 }
-

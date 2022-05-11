@@ -1,7 +1,6 @@
-import React from "react"
-import { Box, VStack, Heading, Image } from "native-base"
-
-const Masthead = ({ title, image, children }) => {
+/* eslint-disable react/prop-types */
+import {VStack, Image} from "native-base";
+export default function Masthead({image, children}) {
   return (
     <VStack h="300px" pb={5}>
       <Image
@@ -16,12 +15,6 @@ const Masthead = ({ title, image, children }) => {
         alt="masthead image"
       />
       {children}
-      <Box flex={1} />
-      <Heading color="white" p={6} size="xl">
-        {title}
-      </Heading>
     </VStack>
-  )
+  );
 }
-
-export default Masthead

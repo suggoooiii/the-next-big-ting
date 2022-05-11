@@ -1,39 +1,49 @@
-import React from "react"
-import {Button, Icon, IButtonProps} from "native-base"
-import {Feather} from "@expo/vector-icons"
+import {Button, Icon} from "native-base";
+import {Feather} from "@expo/vector-icons";
 
-const MenuButton = ({active, icon, children, ...props}) => {
+function MenuButton({active, icon, children, ...props}) {
   return (
     <Button
-      size="lg"
+      size="md"
       _light={{
-        colorScheme: "blue",
         _pressed: {
-          bg: "primary.100",
+          color: "warmGray",
+          bg: "purple.200",
         },
         _text: {
-          color: active ? "blue.50" : "blue.500",
+          color: active ? "purple.800" : "darkText",
         },
       }}
       _dark={{
-        colorScheme: "darkBlue",
         _pressed: {
-          bg: "primary.600",
+          bg: "purple.700",
         },
         _text: {
-          color: active ? "blue.50" : undefined,
+          color: active ? "purple.400" : "purple.50",
         },
       }}
-      bg={active ? undefined : "transparent"}
+      bg={active ? "transparent" : "transparent"}
       variant="solid"
       justifyContent="flex-start"
-      leftIcon={<Icon as={Feather} name={icon} size="sm" opacity={0.5} />}
+      leftIcon={
+        <Icon
+          as={Feather}
+          name={icon}
+          size="lg"
+          opacity={1}
+          _light={{
+            color: "black",
+          }}
+          _dark={{
+            color: "white",
+          }}
+        />
+      }
       {...props}
     >
       {children}
     </Button>
-  )
+  );
 }
 
-export default MenuButton
-
+export default MenuButton;

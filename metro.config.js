@@ -1,7 +1,7 @@
-const { getDefaultConfig } = require('@expo/metro-config')
+const { getDefaultConfig } = require("@expo/metro-config");
 
-const config = getDefaultConfig(__dirname)
+const config = getDefaultConfig(__dirname);
 
-config.resolver.resolverMainFields.unshift('react-native')
+config.resolver.resolverMainFields.unshift("react-native");
 
-module.exports = config
+module.exports = config;

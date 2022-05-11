@@ -4,7 +4,6 @@
     "slug": "the-next-big-thing",
     "userInterfaceStyle": "automatic",
     "notification": {
-      "iosDisplayInForeground": true,
       "icon": "./assets/favicon.png",
 			"androidMode": "default"
     },
