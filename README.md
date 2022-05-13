@@ -19,7 +19,7 @@
 - [React Navigation(v6)](https://reactnavigation.org/) - Routing and navigation
 
 - [Zustand](https://github.com/pmndrs/zustand) - Easy State Managment For React
-- [@react-native-community/datetimepicker] (<https://github.com/react-native-datetimepicker/datetimepicker>) - Date / Time Picker
+- [react-native-community/datetimepicker] (<https://github.com/react-native-datetimepicker/datetimepicker>) - Date / Time Picker
 
 ## Project structure
 
