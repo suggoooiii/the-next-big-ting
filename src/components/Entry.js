@@ -3,27 +3,28 @@
 import {Box, Heading, Text, VStack} from "native-base";
 import Animated, {FadeInDown} from "react-native-reanimated";
 import {SafeAreaView} from "react-native-safe-area-context";
+
+// my imports
 import BlobBackground from "../components/BlockBackground";
 import AnimatedPressable from "../components/AnimatedPressable";
 
 const AnimatedBox = Animated.createAnimatedComponent(Box);
-function Entry({navigation}) {
+export default function Entry({navigation}) {
   return (
     <Box flex={1}>
-      <BlobBackground />
+      <BlobBackground full />
       <SafeAreaView style={{flex: 1}}>
         <VStack justifyContent={"space-between"} p="6" pt="3" flex={1}>
-          <AnimatedBox
-            py={"1"}
-            entering={FadeInDown.duration(2000).delay(1000)}
-          >
-            <Text fontFamily="GishaBold" fontSize={25}>
+          <AnimatedBox py="1" entering={FadeInDown.duration(2000).delay(1000)}>
+            <Text color="warmGray.50" fontFamily="GishaBold" fontSize={25}>
               Suggoooiii-Task
             </Text>
           </AnimatedBox>
           <VStack>
             <AnimatedBox entering={FadeInDown.duration(1000).delay(1000)}>
-              <Heading my={10}>Welcome to Suggoooiii-Tasks !</Heading>
+              <Heading color="warmGray.200" my={10}>
+                Welcome to Suggoooiii-Tasks !
+              </Heading>
             </AnimatedBox>
             <AnimatedBox entering={FadeInDown.duration(600).delay(1250)}>
               <Text fontFamily={"GishaBold"} color={"warmGray.200"}>
@@ -31,7 +32,7 @@ function Entry({navigation}) {
               </Text>
             </AnimatedBox>
             <AnimatedBox entering={FadeInDown.duration(600).delay(1500)}>
-              <AnimatedPressable onPress={() => navigation.navigate("main")}>
+              <AnimatedPressable onPress={() => navigation.navigate("drawer")}>
                 <Box w="full" p="4" bg="white" rounded="10" my={10}>
                   <Text
                     textAlign="center"
@@ -49,5 +50,3 @@ function Entry({navigation}) {
     </Box>
   );
 }
-
-export default Entry;

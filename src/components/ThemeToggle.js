@@ -4,9 +4,9 @@ export default function ThemeToggle() {
   const {colorMode, toggleColorMode} = useColorMode();
   return (
     <HStack space={3} mx="auto" alignItems="center">
-      <SunIcon size={5} />
-      <Switch isChecked={colorMode === "light"} onToggle={toggleColorMode} />
       <MoonIcon size={5} />
+      <Switch isChecked={colorMode === "light"} onToggle={toggleColorMode} />
+      <SunIcon size={5} />
     </HStack>
   );
 }

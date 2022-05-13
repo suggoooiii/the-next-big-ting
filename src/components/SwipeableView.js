@@ -14,10 +14,12 @@ import Animated, {
 //my imports
 import {makeStyledComponent} from "../utils/makeStyledComponent";
 
-const StyledView = makeStyledComponent(Animated.View); // s-width = 348.837209302
-const SCREEN_WIDTH = Dimensions.get("window").width; //375
-const SWIPE_THRESHOLD = -SCREEN_WIDTH * 0.3; // -150 (iphone_xs)
-const R_THRESHOLD = SCREEN_WIDTH * 0.3; // ~= 100 (iphone_xs)
+const StyledView = makeStyledComponent(Animated.View);
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SWIPE_THRESHOLD = -SCREEN_WIDTH / 6;
+const R_THRESHOLD = SCREEN_WIDTH / 6;
+
+const AnimatedIcons = Animated.createAnimatedComponent(Box);
 
 // props from taskItem
 function SwipeableView(props) {
@@ -25,19 +27,17 @@ function SwipeableView(props) {
   const translateX = useSharedValue(0);
   const navigation = useNavigation();
 
-  const navigateOnEvent = () => navigation.navigate("todoview");
+  const navigationOnSwipe = () => navigation.navigate("todoview");
 
   const panGesture = useAnimatedGestureHandler({
     onStart: (_, context) => {
-      // console.log(context);
       context.x = translateX.value;
     },
     onActive: (e, _) => {
       translateX.value = e.translationX;
-      console.log("translateX.value", translateX.value);
     },
     onEnd: () => {
-      const shouldBeDismissed = translateX.value <= SWIPE_THRESHOLD;
+      const shouldBeDismissed = translateX.value < SWIPE_THRESHOLD;
       const shouldOpenAlarmModel = translateX.value >= R_THRESHOLD;
       // cond 1
       if (shouldBeDismissed) {
@@ -46,13 +46,21 @@ function SwipeableView(props) {
       }
       // cond 2
       else if (shouldOpenAlarmModel) {
-        runOnJS(navigateOnEvent)();
+        runOnJS(navigationOnSwipe)();
         translateX.value = withTiming(0);
       } else {
         translateX.value = withTiming(0);
       }
     },
   });
+
+  const rIconContainerStyle = useAnimatedStyle(() => ({
+    opacity: withTiming(
+      translateX.value < SWIPE_THRESHOLD || translateX.value > R_THRESHOLD
+        ? 0
+        : 1
+    ),
+  }));
 
   const facadeStyle = useAnimatedStyle(() => ({
     transform: [
@@ -65,9 +73,16 @@ function SwipeableView(props) {
   return (
     <StyledView w="full">
       {backView && (
-        <Box position="absolute" left={0} right={0} top={0} bottom={0}>
+        <AnimatedIcons
+          style={rIconContainerStyle}
+          position="absolute"
+          left={0}
+          right={0}
+          top={0}
+          bottom={0}
+        >
           {backView}
-        </Box>
+        </AnimatedIcons>
       )}
       <PanGestureHandler
         simultaneousHandlers={simultaneousHandlers}

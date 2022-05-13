@@ -16,9 +16,9 @@ const AnimatedBox = Animated.createAnimatedComponent(Box);
 const AnimatedHStack = Animated.createAnimatedComponent(HStack);
 const AnimatedText = Animated.createAnimatedComponent(Text);
 
-// props from TaskList
-const AnimatedTaskLabel = memo((props) => {
-  // destructure props
+// props from TaskItem
+const AnimatedTaskLabel = memo(props => {
+  // textcolor === activeTextColor
   const {strikethrough, textColor, inactiveTextColor, onPress, children} =
     props;
 
@@ -64,13 +64,13 @@ const AnimatedTaskLabel = memo((props) => {
     const easing = Easing.out(Easing.quad);
     if (strikethrough) {
       hstackOffset.value = withSequence(
-        // WithTimingConfig ==> duration, easing(fn)
+        /*WithTimingConfig ==> duration, easing(fn) **/
         withTiming(4, {duration: 200, easing}),
         withTiming(0, {duration: 200, easing})
       );
       strikethroughWidth.value = withTiming(1, {duration: 400, easing});
       textColorProgress.value = withDelay(
-        600,
+        1000,
         withTiming(1, {duration: 400, easing})
       );
     } else {

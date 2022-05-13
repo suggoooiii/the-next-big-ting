@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import {VStack, Image} from "native-base";
-export default function Masthead({image, children}) {
+export default function Notiees({image, children}) {
   return (
     <VStack h="300px" pb={5}>
       <Image

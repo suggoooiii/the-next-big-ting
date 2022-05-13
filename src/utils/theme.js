@@ -60,7 +60,7 @@ const theme = extendTheme({
   },
   fonts: {heading: "Raleway", body: "Raleway", logo: "Gisha"},
   config: {
-    initialColorMode: "light",
+    initialColorMode: "dark",
   },
   components: {
     Heading: {

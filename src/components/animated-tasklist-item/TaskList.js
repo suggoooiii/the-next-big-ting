@@ -92,7 +92,6 @@ export default function TaskList(props) {
     onFinishEditing,
     onPressLabel,
     onRemoveItem,
-    // handleAlarmModal,
   } = props;
 
   // ref

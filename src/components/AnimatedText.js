@@ -9,13 +9,21 @@ import Animated, {
   withDelay,
   withTiming,
 } from "react-native-reanimated";
+
 const AnimatedTextComponent = Animated.createAnimatedComponent(Heading);
-function AnimatedText({text = "", delay}) {
+
+function AnimatedText({text = "", delay, ...props}) {
   const TextArray = text.split(" ");
   const TextJSX = TextArray.map((word, index) => {
     return (
       <Box key={index} overflow="hidden" flexDirection="row">
-        <EachWord word={word} index={index} wordIndex={index} delay={delay} />
+        <EachWord
+          word={word}
+          index={index}
+          wordIndex={index}
+          delay={delay}
+          {...props}
+        />
         <Text>{index === TextArray.length - 1 ? "" : "   "}</Text>
       </Box>
     );
@@ -29,7 +37,7 @@ function AnimatedText({text = "", delay}) {
 
 export default memo(AnimatedText);
 
-function EachWord({word, wordIndex, delay}) {
+function EachWord({word, wordIndex, delay, ...props}) {
   const EachChar = word.split("");
   const TextJSX = EachChar.map((t, index) => {
     return (
@@ -39,6 +47,7 @@ function EachWord({word, wordIndex, delay}) {
           index={index}
           wordIndex={wordIndex}
           delay={delay}
+          {...props}
         />
       </Box>
     );
@@ -46,7 +55,7 @@ function EachWord({word, wordIndex, delay}) {
   return <Box flexDirection="row">{TextJSX}</Box>;
 }
 
-function EachLetter({char, index, wordIndex, delay}) {
+function EachLetter({char, index, wordIndex, delay, ...props}) {
   const transitionY = useSharedValue(0);
   const styles = useAnimatedStyle(() => ({
     opacity: transitionY.value,
@@ -70,6 +79,7 @@ function EachLetter({char, index, wordIndex, delay}) {
       ellipsizeMode={"tail"}
       numberOfLines={1}
       style={styles}
+      {...props}
     >
       {char}
     </AnimatedTextComponent>

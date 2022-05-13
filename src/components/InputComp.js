@@ -1,21 +1,31 @@
-import {VStack, Image, Input, Text, Center, HStack, Stack} from "native-base";
-import {Dimensions} from "react-native";
+import {Input, useTheme, VStack} from "native-base";
+import PropTypes from "prop-types";
+import {memo} from "react";
 
-export default function InputComp(props) {
-  const windowWidth = Dimensions.get("window").width;
-  const MAX_WIDTH = windowWidth / 1.5;
+function InputComp({header, value, onChangeText, ...props}) {
+  const {colors} = useTheme();
   return (
-    <Stack alignItems="center">
-      <HStack space="4" alignItems="center">
-        <Text>{props.txt}</Text>
-        <Input
-          maxWidth={MAX_WIDTH}
-          py="3"
-          placeholder={props.placeholder}
-          rounded="md"
-          variant="outline"
-        />
-      </HStack>
-    </Stack>
+    <VStack bg="warmGray.700" rounded="10" w="100%">
+      <Input
+        size="md"
+        fontSize={20}
+        mx="auto"
+        my="auto"
+        color="white"
+        variant="unstyled"
+        selectionColor={colors.primary.accent}
+        value={value}
+        onChangeText={onChangeText}
+        {...props}
+      />
+    </VStack>
   );
 }
+
+InputComp.propTypes = {
+  header: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChangeText: PropTypes.func,
+};
+
+export default memo(InputComp);

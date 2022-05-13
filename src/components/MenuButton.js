@@ -1,6 +1,7 @@
 import {Button, Icon} from "native-base";
 import {Feather} from "@expo/vector-icons";
 
+// eslint-disable-next-line react/prop-types
 function MenuButton({active, icon, children, ...props}) {
   return (
     <Button

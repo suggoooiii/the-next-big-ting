@@ -1,53 +1,53 @@
-import * as React from "react";
+import {useRef, useState} from "react";
+import {TouchableWithoutFeedback, Keyboard} from "react-native";
 import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Switch,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import {
-  Input,
   useColorModeValue,
-  VStack,
   Text,
+  Box,
+  useToast,
+  CheckIcon,
+  Divider,
+  FormControl,
+  Heading,
   HStack,
+  MinusIcon,
   Stack,
+  Switch,
+  ScrollView,
 } from "native-base";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import {useNavigation} from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 import shortid from "shortid";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 // my comps
 import AnimatedColorBox from "../components/AnimatedColorBox";
-import AnimatedText from "../components/AnimatedText";
+import AnimatedPressable from "../components/AnimatedPressable";
 import InputComp from "../components/InputComp";
 
+// imports from mainscreen
 export default function TodoModal() {
-  const [subject, setSubject] = React.useState("");
-  const [date, setDate] = React.useState(new Date());
-  const [isToday, setIsToday] = React.useState(false);
-  const [withAlert, setWithAlert] = React.useState(false);
-  // const [listTodos, setListTodos] = React.useState([]);
+  const [subject, setSubject] = useState("");
+  const [isToday, setIsToday] = useState(false);
+  const [withAlert, setWithAlert] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const scrollRef = useRef(null);
+  const toast = useToast();
+  const toastIdRef = useRef();
   const navigation = useNavigation();
 
-  // await AsyncStorage.setItem(
-  // "Todos",
-  // JSON.stringify([...listTodos, newTodo])
-  // );
-  // dispatch(addTodoReducer(newTodo));
-  // console.log("Todo saved correctly");
+  const addToast = (title, color) => {
+    toastIdRef.current = toast.show({
+      render: () => {
+        return (
+          <Box bg={color} p="6" rounded="500" mb="2">
+            {title}
+          </Box>
+        );
+      },
+    });
+  };
 
-  // {
-  // id: shortid.generate(),
-  // subject: "Buy movie tickets for Friday",
-  // done: false,
-  // hour: "12",
-  // isToday: false,
-  // },
   const addTodo = async () => {
     const newTodo = {
       id: shortid.generate(),
@@ -60,16 +60,19 @@ export default function TodoModal() {
     try {
       if (withAlert) {
         await scheduleTodoNotification(newTodo);
+        addToast("Notifcation Is Set", "emerald.600");
       }
       navigation.goBack();
     } catch (e) {
       console.log(e);
+      addToast("Error", "warning.600");
     }
   };
 
+  /* Logic set trigger time to todo.hour if todo.isToday === true else set trigger time to todo.hour + 24 hours
+  const trigger = todo.isToday ? todo.hour : new Date(todo.hour).getTime() + 24 * 60 * 60 * 1000;
+ */
   const scheduleTodoNotification = async todo => {
-    // set trigger time to todo.hour if todo.isToday === true else set trigger time to todo.hour + 24 hours
-    // const trigger = todo.isToday ? todo.hour : new Date(todo.hour).getTime() + 24 * 60 * 60 * 1000;
     const trigger = new Date(todo.hour);
     try {
       await Notifications.scheduleNotificationAsync({
@@ -81,143 +84,137 @@ export default function TodoModal() {
       });
       console.log("Notification scheduled");
     } catch (e) {
-      // eslint-disable-next-line no-alert
-      alert("The notification failed to schedule, make sure the hour is valid");
+      console.log("error", e);
     }
   };
 
-  /*     <AnimatedColorBox
-      flex={1}
-      bg={useColorModeValue("warmGray.200", "warmGray.800")}
-      w="full"
-    > */
+  const onChangeSubject = subj => {
+    setSubject(subj);
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
       }}
     >
-      {/* <View style={styles.container}> */}
       <AnimatedColorBox
-        safeArea
+        safeAreaTop
         flex={1}
-        p="7"
+        px="6"
         bg={useColorModeValue("warmGray.200", "warmGray.800")}
         w="full"
       >
-        <InputComp txt="Task" placeholder="Task" />
+        {/* onChange={(event, selectedDate) => setDate(selectedDate)} */}
+        <ScrollView ref={scrollRef.current} w="full">
+          <Stack
+            space={1}
+            alignSelf="center"
+            safeArea
+            w={{
+              base: "100%",
+              md: "25%",
+            }}
+          >
+            <Box>
+              <Text bold fontSize="md" mb="1">
+                Task
+              </Text>
+              <FormControl mb="5">
+                <FormControl.HelperText mb="1">
+                  Your Task's Subject
+                </FormControl.HelperText>
+                <InputComp onChangeText={onChangeSubject} value={subject} />
+              </FormControl>
+              <Divider />
+              <Box justifyContent="center" h="55" my="auto">
+                <HStack space="2">
+                  <Heading mr="4" my="auto" fontSize="md">
+                    Set Alarm
+                  </Heading>
+                  <HStack p="10">
+                    <MinusIcon size="md" my="auto" mx="2" />
+                    <Switch
+                      value={withAlert}
+                      onValueChange={val => setWithAlert(val)}
+                      name="Alert"
+                      onTrackColor="emerald.500"
+                      offTrackColor="red.600"
+                      size="md"
+                      my="auto"
+                      mx="2"
+                    />
+                    <CheckIcon size="md" my="auto" mx="2" />
+                  </HStack>
+                </HStack>
+              </Box>
+              <Divider />
+              <Box justifyContent="center" h="55" my="auto">
+                <HStack space="6">
+                  <Heading mr="10" my="auto" fontSize="md">
+                    Today
+                  </Heading>
+                  <HStack p="10">
+                    <MinusIcon size="md" my="auto" mx="2" />
+                    <Switch
+                      value={isToday}
+                      onValueChange={val => setIsToday(val)}
+                      onTrackColor="emerald.500"
+                      offTrackColor="red.600"
+                      size="md"
+                      my="auto"
+                      mx="2"
+                    />
+                    <CheckIcon size="md" my="auto" mx="2" />
+                  </HStack>
+                </HStack>
+              </Box>
+              <Divider />
 
-        {/* 
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputTitle}>Name</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Task"
-            placeholderTextColor="#00000030"
-            onChangeText={text => {
-              setSubject(text);
-            }}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputTitle}>Hour</Text>
-          <DateTimePicker
-            value={date}
-            mode={"time"}
-            is24Hour={true}
-            onChange={(event, selectedDate) => setDate(selectedDate)}
-            style={{width: "80%"}}
-          />
-        </View>
-        <View
-          style={[
-            styles.inputContainer,
-            {paddingBottom: 0, alignItems: "center"},
-          ]}
-        >
-          <View>
-            <Text style={styles.inputTitle}>Today</Text>
-            <Text
-              style={{
-                color: "#00000040",
-                fontSize: 14,
-                maxWidth: "84%",
-                paddingBottom: 10,
-              }}
-            >
-              If you disable today, the task will be considered as tomorrow
-            </Text>
-          </View>
-          <Switch
-            value={isToday}
-            onValueChange={value => {
-              setIsToday(value);
-            }}
-          />
-        </View>
-        <View
-          style={[
-            styles.inputContainer,
-            {paddingBottom: 0, alignItems: "center"},
-          ]}
-        >
-          <View>
-            <Text style={styles.inputTitle}>Alert</Text>
-            <Text style={{color: "#00000040", fontSize: 12, maxWidth: "85%"}}>
-              You will receive an alert at the time you set for this reminder
-            </Text>
-          </View>
-          <Switch
-            value={withAlert}
-            onValueChange={value => {
-              setWithAlert(value);
-            }}
-          />
-        </View>
-
-        <TouchableOpacity onPress={addTodo} style={styles.button}>
-          <Text style={{color: "white"}}>Done</Text>
-        </TouchableOpacity> */}
+              <FormControl mb="-16">
+                <Text bold fontSize="md">
+                  Date
+                </Text>
+                <FormControl.HelperText mt="-0.2" px="auto">
+                  If you disable today, the task will be considered as tomorrow
+                </FormControl.HelperText>
+              </FormControl>
+              <DateTimePicker
+                display="clock"
+                mode="time"
+                simultaneousHandlers={scrollRef.current}
+                value={date}
+                is24Hour={true}
+                onChange={(event, selectedDate) => {
+                  setDate(selectedDate);
+                  console.log(
+                    "🚀 ~ file: TodoModal.js ~ line 198 ~ TodoModal ~ selectedDate",
+                    selectedDate
+                  );
+                }}
+                onError={e => console.log("erroor", e)}
+              />
+              <AnimatedPressable onPress={addTodo}>
+                <Box
+                  opacity="0.8"
+                  w="full"
+                  p="4"
+                  bg={useColorModeValue("warmGray.800", "warmGray.200")}
+                  rounded="10"
+                >
+                  <Text
+                    textAlign="center"
+                    color="primary.400"
+                    fontWeight={"700"}
+                  >
+                    Done !
+                  </Text>
+                </Box>
+              </AnimatedPressable>
+            </Box>
+          </Stack>
+        </ScrollView>
       </AnimatedColorBox>
-      {/* </View> */}
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 34,
-    fontWeight: "bold",
-    marginBottom: 35,
-    marginTop: 10,
-  },
-  textInput: {
-    borderBottomColor: "#00000030",
-    borderBottomWidth: 1,
-    width: "80%",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    paddingHorizontal: 30,
-  },
-  inputTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    lineHeight: 24,
-  },
-  inputContainer: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    paddingBottom: 30,
-  },
-  button: {
-    marginTop: 30,
-    marginBottom: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "black",
-    height: 46,
-    borderRadius: 11,
-  },
-});

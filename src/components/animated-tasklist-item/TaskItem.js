@@ -17,7 +17,7 @@ import AnimatedTaskLabel from "./AnimatedTaskLabel";
 import SwipableView from "../SwipeableView";
 import AnimatedCheckbox from "../animated-tasklist-item/AnimatedCheckBox";
 
-// props from mainscreen
+// props from AnimatedTaskItem
 function TaskItem(props) {
   const {
     isEditing,
@@ -62,25 +62,37 @@ function TaskItem(props) {
     [onChangeSubject]
   );
 
+  function backView() {
+    return (
+      <Box
+        flexDirection={"row"}
+        justifyContent="center"
+        w="full"
+        h="full"
+        p="4"
+      >
+        <Icon
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          color={useColorModeValue("yellow.500", "yellow.400")}
+          as={<Feather name="bell" />}
+          size="lg"
+          flex={2}
+        />
+        <Icon
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          color={useColorModeValue("red.700", "red.500")}
+          as={<Feather name="trash-2" />}
+          size="lg"
+        />
+      </Box>
+    );
+  }
+
   return (
     <SwipableView
       simultaneousHandlers={simultaneousHandlers}
       onSwipeLeft={onRemove}
-      backView={
-        <Box flexDirection={"row"} alignItems="center" w="full" h="full" p="4">
-          <Icon
-            color={useColorModeValue("warmGray.800", "warmGray.200")}
-            as={<Feather name="bell" />}
-            size="md"
-            flex={2}
-          />
-          <Icon
-            color={useColorModeValue("warmGray.800", "warmGray.200")}
-            as={<Feather name="trash-2" />}
-            size="md"
-          />
-        </Box>
-      }
+      backView={backView()}
     >
       <HStack
         alignItems="center"

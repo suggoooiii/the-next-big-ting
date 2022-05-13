@@ -1,6 +1,7 @@
 import {Pressable} from "native-base";
 import PropTypes from "prop-types";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -10,27 +11,27 @@ import Animated, {
 const AnimatedPressableWrapper = Animated.createAnimatedComponent(Pressable);
 
 // eslint-disable-next-line react/prop-types
-function AnimatedPressable({children, onPress, style}) {
-  //shared scale
+function AnimatedPressable({children, onPress, style, ...props}) {
+  // shared value for styles
   const AnimatedPressableScaleShared = useSharedValue(1);
-  //shared style
   const AnimatedPressableStyle = useAnimatedStyle(() => ({
     transform: [{scale: AnimatedPressableScaleShared.value}],
   }));
 
   function onPressIn() {
-    AnimatedPressableScaleShared.value = withTiming(0.9);
+    AnimatedPressableScaleShared.value = withTiming(0.9, {});
   }
   function onPressOut() {
-    AnimatedPressableScaleShared.value = withSpring(1);
+    AnimatedPressableScaleShared.value = withSpring(1.2);
   }
   return (
     <AnimatedPressableWrapper
       onPressIn={onPressIn}
       onPressOut={onPressOut}
-      onPress={() => onPress && onPress()}
+      onPress={() => onPress && runOnJS(onPress)()}
       onLongPress={() => null}
       style={[style, AnimatedPressableStyle]}
+      {...props}
     >
       {children}
     </AnimatedPressableWrapper>
