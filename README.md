@@ -1,6 +1,7 @@
 # Minimalistic Animated To Do App
-
 ![Thumbnail]
+
+![Untitled-1](https://user-images.githubusercontent.com/17391138/168375977-34d1e63f-f520-40bd-8427-fffb9b162050.png)
 
 ## Stack
 
