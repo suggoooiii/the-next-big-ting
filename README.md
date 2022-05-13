@@ -19,19 +19,8 @@
 - [React Navigation(v6)](https://reactnavigation.org/) - Routing and navigation
 
 - [Zustand](https://github.com/pmndrs/zustand) - Easy State Managment For React
-- [react-native-community/datetimepicker] (<https://github.com/react-native-datetimepicker/datetimepicker>) - Date / Time Picker
 
-## Project structure
-
-$PROJECT_ROOT
-├── App.js       # Entry point
-└── src
-    ├── screens    # Screen components
-    ├── components # UI components
-    ├── utils      # Custom hooks and helpers
-    ├── assets     # Image file and Fonts
-    ├── store      # Implemeting state managment with Zustand Soon
-    └── assets     # Image files
+- [react-native-community/datetimepicker] (https://github.com/react-native-datetimepicker/datetimepicker) - Date / Time Picker
 
 ## Credits
 
